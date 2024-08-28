@@ -1,0 +1,206 @@
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_login.*
+
+class LoginActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        loginButton.setOnClickListener {
+            // Lógica de autenticación
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        registerButton.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+    }
+}
+package com.example.rideshareconnect
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_trip.*
+
+class TripFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_trip, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        publishTripButton.setOnClickListener {
+            // Lógica para publicar un viaje
+        }
+
+        searchTripButton.setOnClickListener {
+            // Lógica para buscar viajes
+        }
+    }
+}
+package com.example.rideshareconnect
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.fragment_chat.*
+
+class ChatFragment : Fragment() {
+    private val database = FirebaseDatabase.getInstance()
+    private val chatRef = database.getReference("chats")
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_chat, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        sendButton.setOnClickListener {
+            val message = messageEditText.text.toString()
+            chatRef.push().setValue(message)
+            messageEditText.text.clear()
+        }
+
+        // Lógica para mostrar mensajes en tiempo real
+    }
+}
+package com.example.rideshareconnect
+
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_emergency.*
+
+class EmergencyFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_emergency, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        emergencyButton.setOnClickListener {
+            val emergencyNumber = "911"
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:$emergencyNumber")
+            startActivity(intent)
+
+            // Lógica para compartir ubicación en tiempo real
+        }
+    }
+}
+const express = require('express');
+const bodyParser = require('body-parser');
+const twilio = require('twilio');
+
+const app = express();
+app.use(bodyParser.json());
+
+const accountSid = 'your_account_sid';
+const authToken = 'your_auth_token';
+const client = twilio(accountSid, authToken);
+
+app.post('/send-verification-code', (req, res) => {
+    const { phoneNumber } = req.body;
+    client.verify.services('your_service_id')
+        .verifications
+        .create({ to: phoneNumber, channel: 'sms' })
+        .then(verification => res.status(200).send(verification))
+        .catch(error => res.status(500).send(error));
+});
+
+app.post('/verify-code', (req, res) => {
+    const { phoneNumber, code } = req.body;
+    client.verify.services('your_service_id')
+        .verificationChecks
+        .create({ to: phoneNumber, code: code })
+        .then(verification_check => {
+            if (verification_check.status === 'approved') {
+                res.status(200).send('Phone number verified');
+            } else {
+                res.status(400).send('Invalid code');
+            }
+        })
+        .catch(error => res.status(500).send(error));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        emergencyButton.setOnClickListener {
+            val emergencyNumber = "911" // Número de emergencia
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:$emergencyNumber")
+            startActivity(intent)
+
+            // Enviar ubicación en tiempo real a contactos de emergencia
+            sendLocationToEmergencyContacts()
+        }
+    }
+
+    private fun sendLocationToEmergencyContacts() {
+        // Lógica para enviar la ubicación en tiempo real
+    }
+}
+package com.example.rideshareconnect
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_login.*
+
+class LoginActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        loginButton.setOnClickListener {
+            // Lógica de autenticación
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        registerButton.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+    }
+}
